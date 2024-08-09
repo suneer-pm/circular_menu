@@ -20,6 +20,10 @@ class CircularMenuItem extends StatelessWidget {
   final String? badgeLabel;
   final Color? badgeTextColor;
   final Color? badgeColor;
+  final String? toolTipMessage;
+  final Color? toolTipBgColor;
+  final Color? toolTipTextColor;
+  final int? toolTipDurationMs;
 
   /// if animatedIcon and icon are passed, icon will be ignored
   final AnimatedIcon? animatedIcon;
@@ -27,62 +31,74 @@ class CircularMenuItem extends StatelessWidget {
   /// creates a menu item .
   /// [onTap] must not be null.
   /// [padding] and [margin]  must be equal or greater than zero.
-  CircularMenuItem({
-    required this.onTap,
-    this.icon,
-    this.color,
-    this.iconSize = 30,
-    this.boxShadow,
-    this.iconColor,
-    this.animatedIcon,
-    this.padding = 10,
-    this.margin = 10,
-    this.enableBadge = false,
-    this.badgeBottomOffet,
-    this.badgeLeftOffet,
-    this.badgeRightOffet,
-    this.badgeTopOffet,
-    this.badgeRadius,
-    this.badgeTextStyle,
-    this.badgeLabel,
-    this.badgeTextColor,
-    this.badgeColor,
-  })  : assert(padding >= 0.0),
+  CircularMenuItem(
+      {required this.onTap,
+      this.icon,
+      this.color,
+      this.iconSize = 30,
+      this.boxShadow,
+      this.iconColor,
+      this.animatedIcon,
+      this.padding = 10,
+      this.margin = 10,
+      this.enableBadge = false,
+      this.badgeBottomOffet,
+      this.badgeLeftOffet,
+      this.badgeRightOffet,
+      this.badgeTopOffet,
+      this.badgeRadius,
+      this.badgeTextStyle,
+      this.badgeLabel,
+      this.badgeTextColor,
+      this.badgeColor,
+      this.toolTipMessage,
+      this.toolTipBgColor = Colors.black,
+      this.toolTipTextColor = Colors.white,
+      this.toolTipDurationMs = 1})
+      : assert(padding >= 0.0),
         assert(margin >= 0.0);
 
   Widget _buildCircularMenuItem(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.all(margin),
-      decoration: BoxDecoration(
-        color: Colors.transparent,
-        boxShadow: boxShadow ??
-            [
-              BoxShadow(
-                color: color ?? Theme.of(context).primaryColor,
-                blurRadius: 10,
-              ),
-            ],
-        shape: BoxShape.circle,
-      ),
-      child: ClipOval(
-        child: Material(
-          color: color ?? Theme.of(context).primaryColor,
-          child: InkWell(
-            child: Padding(
-              padding: EdgeInsets.all(padding),
-              child: animatedIcon == null
-                  ? Icon(
-                      icon,
-                      size: iconSize,
-                      color: iconColor ?? Colors.white,
-                    )
-                  : animatedIcon,
-            ),
-            onTap: onTap,
+    Tooltip(
+        message: toolTipMessage ?? '',
+        decoration: BoxDecoration(
+            color: toolTipBgColor?.withOpacity(0.9),
+            borderRadius: const BorderRadius.all(Radius.circular(4))),
+        triggerMode: TooltipTriggerMode.longPress,
+        showDuration: Duration(milliseconds: toolTipDurationMs!),
+        textStyle: TextStyle(color: toolTipTextColor, fontSize: 12),
+        child: Container(
+          margin: EdgeInsets.all(margin),
+          decoration: BoxDecoration(
+            color: Colors.transparent,
+            boxShadow: boxShadow ??
+                [
+                  BoxShadow(
+                    color: color ?? Theme.of(context).primaryColor,
+                    blurRadius: 10,
+                  ),
+                ],
+            shape: BoxShape.circle,
           ),
-        ),
-      ),
-    );
+          child: ClipOval(
+            child: Material(
+              color: color ?? Theme.of(context).primaryColor,
+              child: InkWell(
+                child: Padding(
+                  padding: EdgeInsets.all(padding),
+                  child: animatedIcon == null
+                      ? Icon(
+                          icon,
+                          size: iconSize,
+                          color: iconColor ?? Colors.white,
+                        )
+                      : animatedIcon,
+                ),
+                onTap: onTap,
+              ),
+            ),
+          ),
+        ));
   }
 
   Widget _buildCircularMenuItemWithBadge(BuildContext context) {
