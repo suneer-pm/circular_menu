@@ -59,7 +59,7 @@ class CircularMenuItem extends StatelessWidget {
         assert(margin >= 0.0);
 
   Widget _buildCircularMenuItem(BuildContext context) {
-    Tooltip(
+    return Tooltip(
         message: toolTipMessage ?? '',
         decoration: BoxDecoration(
             color: toolTipBgColor?.withOpacity(0.9),
